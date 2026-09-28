@@ -11,6 +11,7 @@ JOB_LEVEL = sys.argv[2] if len(sys.argv) > 2 else "Unknown"
 LOG_FILE = "/var/log/bareos/pbs-sync.log"
 CONFIG_JSON = "/etc/proxmox-backup/servers.json"
 LEGACY_CONF = "/etc/proxmox-backup/pbs-env.conf"
+RCLONE_CONF = "/etc/rclone/rclone.conf"
 DUMP_DIR = "/var/lib/bareos/catalog-dump"
 
 def log(msg):
@@ -23,7 +24,7 @@ def log(msg):
     except Exception:
         pass
 
-log(f"Iniciando orquestração de backup para Proxmox Backup Server(s) [Nível: {JOB_LEVEL}]...")
+log(f"Iniciando orquestração de backup para Proxmox Backup Server(s) e Nuvem [Nível: {JOB_LEVEL}]...")
 
 # 1. Exportar catálogo do Bareos (PostgreSQL)
 try:
@@ -117,49 +118,87 @@ if not servers_to_sync and os.path.exists(LEGACY_CONF):
             "fingerprint": env_vars.get("fingerprint", "")
         })
 
-if not servers_to_sync:
-    log("AVISO: Nenhum servidor PBS habilitado configurado para sincronismo.")
-    log("Configure um ou mais servidores na interface Web: http://172.20.120.37/pbs/")
-    sys.exit(0)
-
-log(f"Encontrado(s) {len(servers_to_sync)} servidor(es) PBS ativo(s) para sincronização.")
-
 has_error = False
-for srv in servers_to_sync:
-    name = srv["name"]
-    repo = srv["repo"]
-    pwd = srv["password"]
-    fp = srv["fingerprint"]
 
-    log(f"-> Sincronizando com [{name}] ({repo})...")
-    env = os.environ.copy()
-    env["PBS_REPOSITORY"] = repo
-    env["PBS_PASSWORD"] = pwd
-    if fp:
-        env["PBS_FINGERPRINT"] = fp
+# Sincronização com o PBS (se houver servidores ativos)
+if servers_to_sync:
+    log(f"Encontrado(s) {len(servers_to_sync)} servidor(es) PBS ativo(s) para sincronização.")
+    for srv in servers_to_sync:
+        name = srv["name"]
+        repo = srv["repo"]
+        pwd = srv["password"]
+        fp = srv["fingerprint"]
 
-    cmd = [
-        "proxmox-backup-client", "backup",
-        f"bareos-storage.pxar:{storage_dir}",
-        f"bareos-catalog.pxar:{DUMP_DIR}",
-        "--backup-id", "bareos01-hikcentral"
-    ]
-    try:
-        res = subprocess.run(cmd, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=600)
-        for line in res.stdout.splitlines():
-            log(f"   [PBS] {line}")
-        if res.returncode == 0:
-            log(f"-> SUCESSO: Snapshot para [{name}] concluído com sucesso!")
-        else:
-            log(f"-> ERRO ao sincronizar com [{name}] (Código {res.returncode}).")
+        log(f"-> Sincronizando com [{name}] ({repo})...")
+        env = os.environ.copy()
+        env["PBS_REPOSITORY"] = repo
+        env["PBS_PASSWORD"] = pwd
+        if fp:
+            env["PBS_FINGERPRINT"] = fp
+
+        cmd = [
+            "proxmox-backup-client", "backup",
+            f"bareos-storage.pxar:{storage_dir}",
+            f"bareos-catalog.pxar:{DUMP_DIR}",
+            "--backup-id", "bareos01-hikcentral"
+        ]
+        try:
+            res = subprocess.run(cmd, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=600)
+            for line in res.stdout.splitlines():
+                log(f"   [PBS] {line}")
+            if res.returncode == 0:
+                log(f"-> SUCESSO: Snapshot para [{name}] concluído com sucesso!")
+            else:
+                log(f"-> ERRO ao sincronizar com [{name}] (Código {res.returncode}).")
+                has_error = True
+        except Exception as e:
+            log(f"-> EXCEÇÃO ao sincronizar com [{name}]: {e}")
             has_error = True
+else:
+    log("INFO: Nenhum servidor PBS ativo no momento.")
+
+# 3. Sincronização com o Google Drive (via rclone se configurado)
+if os.path.exists(RCLONE_CONF):
+    try:
+        with open(RCLONE_CONF, "r", encoding="utf-8") as f:
+            rclone_content = f.read()
+        if "[gdrive]" in rclone_content:
+            log("-> Detectado destino Google Drive [gdrive]. Iniciando sincronização rclone...")
+            
+            # Sincronizar volumes locais para o Google Drive
+            gdrive_dest_storage = "gdrive:OnliBackup/bareos-storage"
+            cmd_rclone_storage = [
+                "rclone", "sync", storage_dir, gdrive_dest_storage,
+                "--config", RCLONE_CONF,
+                "--transfers", "4",
+                "--checkers", "8",
+                "--log-level", "NOTICE"
+            ]
+            res_storage = subprocess.run(cmd_rclone_storage, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=1200)
+            for line in res_storage.stdout.splitlines():
+                log(f"   [GDRIVE] {line}")
+            
+            # Copiar catálogo
+            gdrive_dest_catalog = "gdrive:OnliBackup/catalog-dump"
+            cmd_rclone_cat = [
+                "rclone", "copy", DUMP_DIR, gdrive_dest_catalog,
+                "--config", RCLONE_CONF,
+                "--log-level", "NOTICE"
+            ]
+            res_cat = subprocess.run(cmd_rclone_cat, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=300)
+            
+            if res_storage.returncode == 0 and res_cat.returncode == 0:
+                log("-> SUCESSO: Cópia para o Google Drive concluída com êxito!")
+            else:
+                log(f"-> ERRO ao sincronizar com o Google Drive (Código {res_storage.returncode}/{res_cat.returncode}).")
+                has_error = True
     except Exception as e:
-        log(f"-> EXCEÇÃO ao sincronizar com [{name}]: {e}")
+        log(f"-> EXCEÇÃO ao sincronizar com o Google Drive: {e}")
         has_error = True
 
 if has_error:
-    log("Processo de orquestração PBS finalizado com ALERTAS/ERROS.")
+    log("Processo de orquestração finalizado com ALERTAS/ERROS.")
     sys.exit(1)
 else:
-    log("Processo de orquestração PBS finalizado com SUCESSO!")
+    log("Processo de orquestração finalizado com SUCESSO!")
     sys.exit(0)
