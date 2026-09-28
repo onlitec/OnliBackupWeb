@@ -6,6 +6,20 @@ $RCLONE_CONF = '/etc/rclone/rclone.conf';
 $SA_JSON_PATH = '/etc/rclone/service-account.json';
 $LOG_FILE = '/var/log/bareos/pbs-sync.log';
 $AUTH_PASS = '$R74g20m@2080';
+$HELPER_BIN = '/usr/local/bin/gdrive_auth_helper.py';
+
+function parse_last_json($output) {
+    if (empty($output)) return null;
+    $lines = array_filter(array_map('trim', explode("\n", $output)));
+    while (!empty($lines)) {
+        $candidate = array_pop($lines);
+        $decoded = json_decode($candidate, true);
+        if ($decoded !== null) {
+            return $decoded;
+        }
+    }
+    return null;
+}
 
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
 
@@ -47,7 +61,6 @@ switch ($action) {
 
         $auth_mode = (strpos($conf_content, 'service_account_file') !== false) ? 'service_account' : 'oauth';
         
-        // Executar rclone about gdrive: --json
         $cmd = "sudo /usr/bin/rclone about gdrive: --config " . escapeshellarg($RCLONE_CONF) . " --json 2>&1";
         $out = shell_exec($cmd);
         $quota = json_decode($out, true);
@@ -69,11 +82,66 @@ switch ($action) {
         }
         break;
 
+    case 'start_browser_auth':
+        $team_drive = trim($_POST['team_drive'] ?? $_GET['team_drive'] ?? '');
+        $cmd = "sudo " . escapeshellcmd($HELPER_BIN) . " start " . escapeshellarg($team_drive) . " 2>&1";
+        $out = shell_exec($cmd);
+        $res = parse_last_json($out);
+        if ($res && !empty($res['success'])) {
+            echo json_encode($res);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'error' => $res['error'] ?? 'Falha ao iniciar processo de autorização do Google: ' . trim($out)
+            ]);
+        }
+        break;
+
+    case 'check_browser_auth':
+        $cmd = "sudo " . escapeshellcmd($HELPER_BIN) . " status 2>&1";
+        $out = shell_exec($cmd);
+        $res = parse_last_json($out);
+        if ($res) {
+            // Se concluiu, testar a quota imediatamente
+            if (!empty($res['status']) && $res['status'] === 'completed') {
+                $test_cmd = "sudo /usr/bin/rclone about gdrive: --config " . escapeshellarg($RCLONE_CONF) . " --json 2>&1";
+                $test_out = shell_exec($test_cmd);
+                $quota = json_decode($test_out, true);
+                $res['quota'] = is_array($quota) ? $quota : null;
+            }
+            echo json_encode($res);
+        } else {
+            echo json_encode(['active' => false, 'error' => 'Falha ao checar status: ' . trim($out)]);
+        }
+        break;
+
+    case 'relay_callback':
+        $raw_input = trim($_POST['callback_input'] ?? '');
+        if (empty($raw_input)) {
+            echo json_encode(['success' => false, 'error' => 'URL ou código de callback não fornecido.']);
+            exit;
+        }
+        $cmd = "sudo " . escapeshellcmd($HELPER_BIN) . " relay " . escapeshellarg($raw_input) . " 2>&1";
+        $out = shell_exec($cmd);
+        $res = parse_last_json($out);
+        if ($res) {
+            echo json_encode($res);
+        } else {
+            echo json_encode(['success' => false, 'error' => trim($out)]);
+        }
+        break;
+
+    case 'cancel_browser_auth':
+        $cmd = "sudo " . escapeshellcmd($HELPER_BIN) . " cancel 2>&1";
+        $out = shell_exec($cmd);
+        $res = parse_last_json($out);
+        echo json_encode($res ?: ['success' => true]);
+        break;
+
     case 'save_service_account':
         $sa_content = trim($_POST['sa_json'] ?? '');
         $team_drive = trim($_POST['team_drive'] ?? '');
 
-        // Se veio arquivo via upload
         if (!empty($_FILES['sa_file']['tmp_name'])) {
             $sa_content = file_get_contents($_FILES['sa_file']['tmp_name']);
         }
@@ -83,7 +151,6 @@ switch ($action) {
             exit;
         }
 
-        // Validar se é JSON válido
         $json_test = json_decode($sa_content, true);
         if (!$json_test || empty($json_test['client_email'])) {
             echo json_encode(['success' => false, 'error' => 'O JSON fornecido não é uma chave de Conta de Serviço (Service Account) válida do Google Cloud.']);
@@ -108,7 +175,6 @@ switch ($action) {
         file_put_contents($RCLONE_CONF, $rclone_content);
         chmod($RCLONE_CONF, 0664);
 
-        // Testar conexão imediatamente
         $test_cmd = "sudo /usr/bin/rclone about gdrive: --config " . escapeshellarg($RCLONE_CONF) . " --json 2>&1";
         $test_out = shell_exec($test_cmd);
         $test_quota = json_decode($test_out, true);
@@ -137,7 +203,6 @@ switch ($action) {
             exit;
         }
 
-        // Tentar formatar caso o usuário tenha colado com quebras
         $token_clean = trim($token_raw);
 
         if (!is_dir('/etc/rclone')) {
