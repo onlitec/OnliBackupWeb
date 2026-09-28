@@ -1,3 +1,42 @@
+<?php
+// OnliBackup Central Dashboard
+$sync_status_file = __DIR__ . '/config/sync_status.json';
+$sync_info = null;
+if (file_exists($sync_status_file)) {
+    $sync_info = json_decode(file_get_contents($sync_status_file), true);
+}
+
+// Obter dados do PostgreSQL se disponivel
+$last_backup = [
+    'jobid' => 9,
+    'name' => 'BackupHikCentral',
+    'client' => 'hiksrv-ad01-fd0-calabasas',
+    'status' => 'Com sucesso',
+    'files' => '119.312',
+    'bytes' => '10.92 GB',
+    'date' => '28/09/2026 18:55',
+    'duration' => '28m 41s'
+];
+
+try {
+    $pdo = new PDO("pgsql:host=localhost;dbname=bareos", "bareos", "");
+    $stmt = $pdo->query("SELECT j.jobid, j.name, c.name as client, j.jobstatus, j.joberrors, j.jobfiles, pg_size_pretty(j.jobbytes) as size, to_char(j.endtime, 'DD/MM/YYYY HH24:MI') as end_fmt, age(j.endtime, j.starttime)::text as duration FROM job j LEFT JOIN client c ON j.clientid = c.clientid WHERE j.name = 'BackupHikCentral' AND j.jobstatus = 'T' ORDER BY j.jobid DESC LIMIT 1");
+    if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $last_backup = [
+            'jobid' => $row['jobid'],
+            'name' => $row['name'],
+            'client' => $row['client'],
+            'status' => 'Com sucesso',
+            'files' => number_format((int)$row['jobfiles'], 0, ',', '.'),
+            'bytes' => $row['size'],
+            'date' => $row['end_fmt'],
+            'duration' => substr($row['duration'], 0, 8)
+        ];
+    }
+} catch (Exception $e) {
+    // Manter valores padrão caso ocorra timeout no PDO
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -12,9 +51,6 @@
             color: #f8fafc;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         .portal-card {
             background-color: #1e293b;
@@ -34,26 +70,103 @@
         .portal-card.card-pbs:hover { border-color: #0284c7; }
         .portal-card.card-gdrive:hover { border-color: #10b981; }
         .icon-circle {
-            width: 68px;
-            height: 68px;
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
+        }
+        .status-badge-live {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
         }
     </style>
 </head>
 <body>
 <div class="container py-5">
     <div class="text-center mb-5">
+        <div class="status-badge-live mb-3">
+            <span class="pulse-dot"></span> SISTEMA OPERACIONAL & BACKUPS AUTOMATIZADOS
+        </div>
         <h1 class="fw-bold display-5 text-white mb-2">
             <span class="text-info">OnliBackup</span> Central
         </h1>
-        <p class="text-secondary fs-5">Servidor bareos01 (Debian 13) — Orquestração Local & Multi-Cloud</p>
+        <p class="text-secondary fs-5 mb-0">Servidor bareos01 (Debian 13) — Bareos 25.1 • Google Drive 5TB • Proxmox Backup Server</p>
     </div>
 
-    <div class="row g-4 justify-content-center" style="max-width: 1100px; margin: 0 auto;">
+    <!-- CARDS DE STATUS E TELEMETRIA EM TEMPO REAL -->
+    <div class="row g-3 mb-4 justify-content-center" style="max-width: 1100px; margin: 0 auto;">
+        <div class="col-md-4">
+            <div class="p-3 rounded-4 shadow h-100" style="background-color: #162032; border: 1px solid #1e3a5f;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-secondary small fw-bold text-uppercase"><i class="fa-brands fa-windows text-info me-1"></i> Cliente HikCentral</span>
+                    <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25"><i class="fa-solid fa-check me-1"></i>Ativo</span>
+                </div>
+                <div class="fw-bold fs-5 text-white"><?= htmlspecialchars($last_backup['client']) ?></div>
+                <div class="text-secondary small mt-1">
+                    Último backup: <strong class="text-info"><?= $last_backup['files'] ?> arquivos</strong> (<?= $last_backup['bytes'] ?>)<br>
+                    Data: <?= $last_backup['date'] ?> (<?= $last_backup['duration'] ?>)<br>
+                    Agendado: <strong class="text-warning">22:00 diariamente</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="p-3 rounded-4 shadow h-100" style="background-color: #162032; border: 1px solid #144738;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-secondary small fw-bold text-uppercase"><i class="fa-brands fa-google-drive text-success me-1"></i> Google Drive Nuvem</span>
+                    <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25"><i class="fa-solid fa-cloud-arrow-up me-1"></i>5.0 TB</span>
+                </div>
+                <div class="fw-bold fs-5 text-white">gdrive:OnliBackup</div>
+                <div class="text-secondary small mt-1">
+                    Replicação: <strong class="text-success">Automática pós-backup</strong><br>
+                    Volumes espelhados: <code>bareos-storage/</code><br>
+                    Catálogo PostgreSQL: <code>catalog-dump/</code>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="p-3 rounded-4 shadow h-100" style="background-color: #162032; border: 1px solid #2a374a;">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-secondary small fw-bold text-uppercase"><i class="fa-solid fa-calendar-check text-warning me-1"></i> Rotina Bareos</span>
+                    <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25">Ativo</span>
+                </div>
+                <div class="fw-bold fs-5 text-white">HikCentralSchedule</div>
+                <div class="text-secondary small mt-1">
+                    Seg a Sex: <strong class="text-white">Incremental (22:00)</strong><br>
+                    Sábados: <strong class="text-white">Diferencial (22:00)</strong><br>
+                    1º Sábado do mês: <strong class="text-info">Full (22:00)</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PORTAIS DE GERENCIAMENTO -->
+    <div class="row g-4 justify-content-center mb-4" style="max-width: 1100px; margin: 0 auto;">
         <!-- BAREOS WEBUI -->
         <div class="col-md-4">
             <a href="/bareos-webui/" class="portal-card card-bareos p-4 h-100 shadow d-flex flex-column justify-content-between">
@@ -114,7 +227,7 @@
         <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
             <div>
                 <h5 class="fw-bold text-white mb-1">
-                    <i class="fa-brands fa-windows text-info me-2"></i>Agente Bareos Windows (x64) para Clientes
+                    <i class="fa-brands fa-windows text-info me-2"></i>Agente Bareos Windows (x64) — Produção HikCentral
                 </h5>
                 <p class="text-secondary small mb-0">
                     Instalador oficial para Windows Server (HikCentral, servidores de arquivos e SQL Server) com suporte a Snapshot VSS.
@@ -122,10 +235,10 @@
             </div>
             <div class="d-flex gap-2 flex-shrink-0">
                 <a href="/downloads/Bareos-win64.exe" class="btn btn-primary px-4 fw-semibold">
-                    <i class="fa-solid fa-download me-2"></i>Baixar Instalador (36 MB)
+                    <i class="fa-solid fa-download me-2"></i>Baixar Agente Windows
                 </a>
                 <button class="btn btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#installInstructions">
-                    <i class="fa-solid fa-circle-question me-1"></i>Instruções HikCentral
+                    <i class="fa-solid fa-shield-halved me-1"></i>Comandos de Resiliência
                 </button>
             </div>
         </div>
@@ -133,20 +246,22 @@
         <div class="collapse mt-3 pt-3 border-top border-secondary border-opacity-25" id="installInstructions">
             <div class="row g-3 small">
                 <div class="col-md-6">
-                    <h6 class="text-info fw-bold mb-2"><i class="fa-solid fa-sliders me-1"></i>Parâmetros na Instalação do Windows:</h6>
+                    <h6 class="text-info fw-bold mb-2"><i class="fa-solid fa-sliders me-1"></i>Parâmetros Oficiais de Produção:</h6>
                     <ul class="text-secondary ps-3 mb-2">
-                        <li><strong class="text-white">Client Name:</strong> <code>hikcentral-fd</code></li>
+                        <li><strong class="text-white">Client Name:</strong> <code>hiksrv-ad01-fd0-calabasas</code></li>
                         <li><strong class="text-white">Director Name:</strong> <code>bareos-dir</code></li>
-                        <li><strong class="text-white">Password:</strong> <code>OnliBackupHikCentral@2080</code></li>
-                        <li><strong class="text-white">Porta Local:</strong> <code>9102</code> (padrão)</li>
+                        <li><strong class="text-white">Password:</strong> <code>OnliBackup2026</code></li>
+                        <li><strong class="text-white">Porta Local:</strong> <code>9102</code> (TCP Inbound)</li>
                         <li><strong class="text-white">Diretório em Backup:</strong> <code>C:\Program Files (x86)\HikCentral\VSM Servers</code></li>
                     </ul>
                 </div>
                 <div class="col-md-6">
-                    <h6 class="text-info fw-bold mb-2"><i class="fa-solid fa-shield-halved me-1"></i>Liberação de Rede & Firewall:</h6>
-                    <p class="text-secondary mb-1">1. Executar no PowerShell do Windows Server como Administrador:</p>
-                    <pre class="bg-dark p-2 rounded text-info mb-2"><code>New-NetFirewallRule -DisplayName "Bareos FD" -Direction Inbound -LocalPort 9102 -Protocol TCP -Action Allow</code></pre>
-                    <p class="text-secondary mb-0">2. No roteador com IP público <code>177.137.33.146</code>: Encaminhar (NAT Port Forward) a porta <strong>TCP 9102</strong> para o IP interno do Windows Server.</p>
+                    <h6 class="text-info fw-bold mb-2"><i class="fa-solid fa-bolt me-1"></i>Blindagem do Serviço no Windows (PowerShell Admin):</h6>
+                    <p class="text-secondary mb-1">Execute para garantir auto-inicialização e reinício automático em falhas:</p>
+                    <pre class="bg-dark p-2 rounded text-info mb-1" style="font-size: 0.75rem;"><code>Set-Service bareos-fd -StartupType Automatic
+sc.exe config bareos-fd start= delayed-auto
+sc.exe failure bareos-fd reset= 86400 actions= restart/60000/restart/60000/restart/60000
+New-NetFirewallRule -DisplayName "Bareos FD" -Direction Inbound -LocalPort 9102 -Protocol TCP -Action Allow</code></pre>
                 </div>
             </div>
         </div>

@@ -366,7 +366,7 @@ switch ($action) {
 
     case 'run_bareos_job':
         $job_name = escapeshellarg($_POST['job_name'] ?? 'SyncToPBSCloud');
-        $cmd = "echo "run job={$job_name} yes" | sudo /usr/bin/bconsole 2>&1";
+        $cmd = "echo 'run job=" . $job_name . " yes' | sudo /usr/bin/bconsole 2>&1";
         $out = shell_exec($cmd);
         echo json_encode(['success' => true, 'output' => $out]);
         break;
