@@ -625,7 +625,11 @@ async function submitRelayCallback() {
 
         if (data.success) {
             msgBox.className = 'small mt-2 text-success fw-bold';
-            msgBox.textContent = '✅ Callback recebido! Finalizando conexão...';
+            msgBox.textContent = '✅ Conectado com sucesso! Atualizando painel...';
+            setTimeout(() => {
+                browserAuthModalInstance.hide();
+                location.reload();
+            }, 1500);
         } else {
             msgBox.className = 'small mt-2 text-danger';
             msgBox.textContent = 'Erro ao processar: ' + (data.error || 'Tente novamente');
