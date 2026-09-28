@@ -1,0 +1,9 @@
+Storage {
+  Name = "Google-Drive-Target"
+  Description = "Repositório em Nuvem Google Drive (5.0 TB Offsite)"
+  Address = bareos01
+  Password = "ZA2XYKCgTgugNYwhj+/HHx0lbGYOH39Anys0vaxQhPxz"
+  Device = FileStorage
+  Media Type = File
+  Enabled = yes
+}

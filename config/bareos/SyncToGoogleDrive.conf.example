@@ -1,0 +1,15 @@
+Job {
+  Name = "SyncToGoogleDrive"
+  Description = "Sincroniza os volumes locais e o catálogo PostgreSQL com a nuvem do Google Drive"
+  Type = Admin
+  JobDefs = "DefaultJob"
+  Enabled = yes
+
+  RunScript {
+    RunsWhen = Before
+    RunsOnClient = No
+    RunsOnSuccess = Yes
+    RunsOnFailure = No
+    Command = "/usr/local/bin/sync-to-pbs.sh %j %l"
+  }
+}
