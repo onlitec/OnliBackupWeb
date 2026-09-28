@@ -99,7 +99,7 @@
                     </div>
                     <h4 class="fw-bold mb-2">Google Drive</h4>
                     <p class="text-secondary small mb-4">
-                        Sincronização offsite via rclone para contas Google Pessoais ou Workspace (Service Account), monitoramento de quota e logs.
+                        Sincronização offsite via rclone para contas Google Pessoais ou Workspace, monitoramento de quota (5.0 TB) e logs.
                     </p>
                 </div>
                 <div class="d-flex align-items-center text-success fw-semibold small">
@@ -109,9 +109,53 @@
         </div>
     </div>
 
+    <!-- WINDOWS CLIENT DOWNLOAD & GUIDE BANNER -->
+    <div class="mt-4 mx-auto p-4 rounded-4 shadow" style="max-width: 1100px; background-color: #1e293b; border: 1px solid #334155;">
+        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+            <div>
+                <h5 class="fw-bold text-white mb-1">
+                    <i class="fa-brands fa-windows text-info me-2"></i>Agente Bareos Windows (x64) para Clientes
+                </h5>
+                <p class="text-secondary small mb-0">
+                    Instalador oficial para Windows Server (HikCentral, servidores de arquivos e SQL Server) com suporte a Snapshot VSS.
+                </p>
+            </div>
+            <div class="d-flex gap-2 flex-shrink-0">
+                <a href="/downloads/Bareos-win64.exe" class="btn btn-primary px-4 fw-semibold">
+                    <i class="fa-solid fa-download me-2"></i>Baixar Instalador (36 MB)
+                </a>
+                <button class="btn btn-outline-info" type="button" data-bs-toggle="collapse" data-bs-target="#installInstructions">
+                    <i class="fa-solid fa-circle-question me-1"></i>Instruções HikCentral
+                </button>
+            </div>
+        </div>
+
+        <div class="collapse mt-3 pt-3 border-top border-secondary border-opacity-25" id="installInstructions">
+            <div class="row g-3 small">
+                <div class="col-md-6">
+                    <h6 class="text-info fw-bold mb-2"><i class="fa-solid fa-sliders me-1"></i>Parâmetros na Instalação do Windows:</h6>
+                    <ul class="text-secondary ps-3 mb-2">
+                        <li><strong class="text-white">Client Name:</strong> <code>hikcentral-fd</code></li>
+                        <li><strong class="text-white">Director Name:</strong> <code>bareos-dir</code></li>
+                        <li><strong class="text-white">Password:</strong> <code>OnliBackupHikCentral@2080</code></li>
+                        <li><strong class="text-white">Porta Local:</strong> <code>9102</code> (padrão)</li>
+                        <li><strong class="text-white">Diretório em Backup:</strong> <code>C:\Program Files (x86)\HikCentral\VSM Servers</code></li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-info fw-bold mb-2"><i class="fa-solid fa-shield-halved me-1"></i>Liberação de Rede & Firewall:</h6>
+                    <p class="text-secondary mb-1">1. Executar no PowerShell do Windows Server como Administrador:</p>
+                    <pre class="bg-dark p-2 rounded text-info mb-2"><code>New-NetFirewallRule -DisplayName "Bareos FD" -Direction Inbound -LocalPort 9102 -Protocol TCP -Action Allow</code></pre>
+                    <p class="text-secondary mb-0">2. No roteador com IP público <code>177.137.33.146</code>: Encaminhar (NAT Port Forward) a porta <strong>TCP 9102</strong> para o IP interno do Windows Server.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="text-center mt-5 text-secondary small">
         IP: <code>172.20.120.37</code> • Kernel 6.12 • PostgreSQL 17 • Bareos 25.1 • PBS Client 4.2.6 • Rclone 1.60
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
