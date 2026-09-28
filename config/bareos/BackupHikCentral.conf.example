@@ -1,13 +1,12 @@
 Job {
   Name = "BackupHikCentral"
-  Description = "Backup do HikCentral VSM Servers com VSS e réplica offsite"
+  Description = "Backup do HikCentral VSM Servers com VSS e replica offsite"
   JobDefs = "DefaultJob"
-  Client = "hikcentral-fd"
+  Client = "hiksrv-ad01-fd0-calabasas"
   FileSet = "HikCentralData"
   Storage = "File"
   Pool = "Full"
 
-  # Sincronização automática pós-backup para o Google Drive e PBS Nuvem
   RunScript {
     RunsWhen = After
     RunsOnSuccess = Yes

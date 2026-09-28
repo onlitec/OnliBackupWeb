@@ -1,8 +1,8 @@
 Client {
-  Name = "hikcentral-fd"
+  Name = "hiksrv-ad01-fd0-calabasas"
   Description = "Windows Server - HikCentral (177.137.33.146)"
   Address = "177.137.33.146"
-  Password = "OnliBackupHikCentral@2080"
+  Password = "OnliBackup2026"
   File Retention = 30 days
   Job Retention = 6 months
   AutoPrune = yes
