@@ -1,0 +1,16 @@
+# Arquivos de configuracao local e credenciais
+/etc/
+*.conf
+*.credentials
+*.json
+!composer.json
+
+# Logs e temporarios
+*.log
+*.tmp
+*.gz
+cookie.txt
+
+# SO
+.DS_Store
+Thumbs.db

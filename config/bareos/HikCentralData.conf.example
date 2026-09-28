@@ -1,0 +1,18 @@
+# FileSet para o HikCentral (Windows Server) com VSS ativado
+FileSet {
+  Name = "HikCentralData"
+  Enable VSS = yes
+  Include {
+    Options {
+      Signature = MD5
+      Compression = GZIP
+      IgnoreCase = yes
+    }
+    File = "C:/Program Files/HikCentral"
+    File = "C:/HikCentralData"
+  }
+  Exclude {
+    File = "C:/Program Files/HikCentral/temp"
+    File = "C:/Program Files/HikCentral/log"
+  }
+}

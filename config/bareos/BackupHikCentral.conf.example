@@ -1,0 +1,17 @@
+# Job de Backup do HikCentral com sincronismo automático para o PBS Nuvem
+Job {
+  Name = "BackupHikCentral"
+  JobDefs = "DefaultJob"
+  Client = "hikcentral-fd"
+  FileSet = "HikCentralData"
+  Storage = "File"
+  Pool = "Incremental"
+
+  # Sincronismo para o PBS Nuvem acionado após conclusão com sucesso
+  RunScript {
+    RunsWhen = After
+    RunsOnSuccess = Yes
+    RunsOnFailure = No
+    Command = "/usr/local/bin/sync-to-pbs.sh %j %l"
+  }
+}
