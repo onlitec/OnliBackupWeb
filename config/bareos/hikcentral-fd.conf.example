@@ -1,11 +1,9 @@
-# Definição do Cliente Windows Server - HikCentral
 Client {
-  Name = hikcentral-fd
-  Address = 172.20.120.50 # Substituir pelo IP/Hostname ou IP VPN do Windows
-  Password = "XXX_SENHA_DO_BAREOS_FD_NO_WINDOWS_XXX"
+  Name = "hikcentral-fd"
+  Description = "Windows Server - HikCentral (177.137.33.146)"
+  Address = "177.137.33.146"
+  Password = "OnliBackupHikCentral@2080"
   File Retention = 30 days
   Job Retention = 6 months
   AutoPrune = yes
-  TLS Enable = Yes
-  TLS Require = Yes
 }

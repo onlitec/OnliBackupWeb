@@ -1,13 +1,13 @@
-# Job de Backup do HikCentral com sincronismo automático para o PBS Nuvem
 Job {
   Name = "BackupHikCentral"
+  Description = "Backup do HikCentral VSM Servers com VSS e réplica offsite"
   JobDefs = "DefaultJob"
   Client = "hikcentral-fd"
   FileSet = "HikCentralData"
   Storage = "File"
-  Pool = "Incremental"
+  Pool = "Full"
 
-  # Sincronismo para o PBS Nuvem acionado após conclusão com sucesso
+  # Sincronização automática pós-backup para o Google Drive e PBS Nuvem
   RunScript {
     RunsWhen = After
     RunsOnSuccess = Yes

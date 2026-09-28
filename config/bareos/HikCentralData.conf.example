@@ -1,6 +1,6 @@
-# FileSet para o HikCentral (Windows Server) com VSS ativado
 FileSet {
   Name = "HikCentralData"
+  Description = "Dados e VSM Servers do HikCentral no Windows com VSS"
   Enable VSS = yes
   Include {
     Options {
@@ -8,11 +8,6 @@ FileSet {
       Compression = GZIP
       IgnoreCase = yes
     }
-    File = "C:/Program Files/HikCentral"
-    File = "C:/HikCentralData"
-  }
-  Exclude {
-    File = "C:/Program Files/HikCentral/temp"
-    File = "C:/Program Files/HikCentral/log"
+    File = "C:/Program Files (x86)/HikCentral/VSM Servers"
   }
 }
