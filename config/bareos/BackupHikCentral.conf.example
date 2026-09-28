@@ -7,10 +7,12 @@ Job {
   Storage = "File"
   Pool = "Full"
 
+  # Executa no SERVIDOR LINUX (bareos01) apos o backup para sincronizar para o Google Drive e PBS
   RunScript {
     RunsWhen = After
     RunsOnSuccess = Yes
     RunsOnFailure = No
+    RunsOnClient = No
     Command = "/usr/local/bin/sync-to-pbs.sh %j %l"
   }
 }
