@@ -118,9 +118,6 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
             </div>
         </div>
-        <div class="text-md-end text-muted small flex-shrink-0">
-            Destino: <code>gdrive:OnliBackup/bareos-storage</code>
-        </div>
     </div>
 </div>
 

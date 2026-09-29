@@ -152,7 +152,7 @@ logAudit('generate_report', "Emitiu comprovante de auditoria para o servidor {$s
                     <tr>
                         <td class="fw-semibold">2. Replicação em Nuvem Offsite</td>
                         <td>Google Cloud Storage (5.0 TB)</td>
-                        <td><code>gdrive:OnliBackup/bareos-storage/</code></td>
+                        <td>Google Cloud Storage (Criptografado)</td>
                         <td><span class="badge bg-success">Sincronizado</span></td>
                     </tr>
                     <tr>
