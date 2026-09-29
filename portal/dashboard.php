@@ -108,7 +108,7 @@ require_once __DIR__ . '/includes/header.php';
             </div>
             <div>
                 <div class="d-flex align-items-center gap-2">
-                    <h6 class="fw-bold text-dark mb-0">Proteção Geográfica Offsite (Google Drive 5.0 TB)</h6>
+                    <h6 class="fw-bold text-dark mb-0">Google Cloud Storage (Google Cloud Storage 5.0 TB)</h6>
                     <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25" style="font-size: 0.65rem;">
                         <i class="fa-solid fa-shield-check me-1"></i>Ativo
                     </span>
