@@ -1,12 +1,12 @@
 <?php
-// OnliBackup - Central de Acesso Unificada (Cliente & Administradores)
+// OnliBackup Enterprise - Central de Acesso Corporativa
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OnliBackup — Central de Acesso Seguro</title>
+    <title>OnliBackup Enterprise — Central de Backup & Continuidade Operacional</title>
     <!-- Anti-flicker theme loader -->
     <script>
         (function() {
@@ -26,82 +26,100 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-    <!-- BARRA SUPERIOR MINIMALISTA COM SELETOR WHITE / DARK -->
-    <header class="py-3 border-bottom" style="background-color: var(--bg-surface); border-color: var(--border-color) !important;">
+    <!-- BARRA SUPERIOR CORPORATIVA COM GLASSMORPHISM -->
+    <nav class="navbar-corporate py-3">
         <div class="container d-flex justify-content-between align-items-center">
-            <a href="/" class="d-flex align-items-center gap-2 text-decoration-none">
-                <span class="fs-4 text-primary"><i class="fa-solid fa-shield-halved"></i></span>
-                <span class="fw-bold fs-5 brand-text">OnliBackup</span>
-                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 ms-1 d-none d-sm-inline">Enterprise</span>
+            <a href="/" class="d-flex align-items-center gap-3 text-decoration-none">
+                <div class="brand-emblem">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div class="d-flex flex-column">
+                    <div class="brand-title">Onli<span>Backup</span></div>
+                    <span class="text-muted" style="font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">
+                        Enterprise Resilience
+                    </span>
+                </div>
             </a>
-            <div>
-                <button type="button" class="theme-toggle-btn" title="Alternar tema">
+            
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-none d-md-flex align-items-center gap-2 px-3 py-1 rounded-pill" style="background: var(--status-success-bg); border: 1px solid var(--status-success-border);">
+                    <span class="pulse-indicator"></span>
+                    <span style="font-size: 0.75rem; font-weight: 700; color: var(--status-success); letter-spacing: 0.04em;">CLUSTER ONLINE</span>
+                </div>
+                
+                <button type="button" class="theme-pill-btn" title="Alternar tema visual">
                     <i class="theme-toggle-icon fa-solid fa-moon text-primary"></i>
-                    <span class="theme-toggle-text">Tema Escuro</span>
+                    <span class="theme-toggle-text d-none d-sm-inline">Tema Escuro</span>
                 </button>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <!-- ÁREA PRINCIPAL COM AS DUAS OPÇÕES -->
+    <!-- ÁREA PRINCIPAL / HERO CORPORATIVO -->
     <main class="flex-grow-1 d-flex align-items-center py-5">
-        <div class="container" style="max-width: 1040px;">
+        <div class="container" style="max-width: 1140px;">
             
-            <div class="text-center mb-5">
-                <div class="status-badge-live mb-3">
-                    <span class="pulse-dot"></span> SISTEMA OPERACIONAL & BACKUPS CONSOLIDADOS
+            <!-- HERO HEADLINE -->
+            <div class="hero-section">
+                <div class="hero-pill">
+                    <i class="fa-solid fa-network-wired me-1"></i>
+                    Continuidade de Negócios & Governança de Dados
                 </div>
-                <h1 class="fw-bold display-5 mb-2" style="letter-spacing: -0.5px;">
-                    Central de Acesso Seguro
+                <h1 class="hero-headline">
+                    Central de Acesso Seguro & Gestão
                 </h1>
-                <p class="text-secondary fs-5 mx-auto" style="max-width: 650px;">
-                    Selecione o seu portal de destino abaixo para consultar seus relatórios de backup ou gerenciar a infraestrutura:
+                <p class="hero-subhead">
+                    Plataforma corporativa de proteção contínua de dados, orquestração híbrida de volumes e conformidade técnica com a LGPD.
                 </p>
             </div>
 
-            <!-- GRID COM EXATAMENTE 2 OPÇÕES -->
+            <!-- AS DUAS OPÇÕES EXCLUSIVAS -->
             <div class="row g-4 justify-content-center">
                 
                 <!-- CARD 1: PORTAL DO CLIENTE -->
-                <div class="col-md-6">
-                    <div class="choice-card">
+                <div class="col-md-6 col-lg-5">
+                    <div class="corporate-card card-client">
                         <div>
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2 rounded-pill fw-semibold">
-                                    <i class="fa-solid fa-users me-1"></i> Área do Cliente
+                            <div class="card-badge-header">
+                                <span class="category-tag" style="background: var(--status-success-bg); color: var(--status-success); border: 1px solid var(--status-success-border);">
+                                    <i class="fa-solid fa-building-shield me-1"></i> Auditoria Corporativa
                                 </span>
-                                <span class="badge-status badge-status-success">
-                                    <span class="status-indicator indicator-success"></span> Disponível
+                                <span class="status-chip status-chip-success">
+                                    <i class="fa-solid fa-check"></i> Autorizado
                                 </span>
                             </div>
 
-                            <div class="choice-icon bg-primary bg-opacity-10 text-primary">
-                                <i class="fa-solid fa-building-shield"></i>
+                            <div class="icon-holder" style="background: var(--status-success-bg); color: var(--status-success); border: 1px solid var(--status-success-border);">
+                                <i class="fa-solid fa-shield-halved"></i>
                             </div>
 
-                            <h3 class="fw-bold mb-2">Portal do Cliente</h3>
-                            <p class="text-secondary mb-4">
-                                Acesso exclusivo para clientes corporativos. Acompanhe a integridade, status dos jobs executados, volumes de dados e laudos de auditoria dos servidores autorizados.
+                            <h2 class="card-title">Portal do Cliente</h2>
+                            <p class="card-desc">
+                                Acesso exclusivo para clientes corporativos. Acompanhe a integridade dos seus backups, laudos técnicos de conformidade e status dos servidores autorizados.
                             </p>
 
-                            <ul class="list-unstyled mb-4 small text-secondary">
-                                <li class="mb-2 d-flex align-items-center">
-                                    <i class="fa-solid fa-circle-check text-success me-2"></i>
-                                    <span>Status de execução e integridade em tempo real</span>
+                            <ul class="feature-check-list">
+                                <li>
+                                    <i class="fa-solid fa-circle-check text-success"></i>
+                                    <span>Monitoramento de saúde e jobs em tempo real</span>
                                 </li>
-                                <li class="mb-2 d-flex align-items-center">
-                                    <i class="fa-solid fa-circle-check text-success me-2"></i>
-                                    <span>Histórico de retenção, arquivos e volumes</span>
+                                <li>
+                                    <i class="fa-solid fa-circle-check text-success"></i>
+                                    <span>Histórico de retenção, arquivos e volumes protegidos</span>
                                 </li>
-                                <li class="d-flex align-items-center">
-                                    <i class="fa-solid fa-circle-check text-success me-2"></i>
-                                    <span>Recuperação autônoma de senha via e-mail</span>
+                                <li>
+                                    <i class="fa-solid fa-circle-check text-success"></i>
+                                    <span>Emissão de laudo oficial de conformidade LGPD</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-circle-check text-success"></i>
+                                    <span>Recuperação de senha autônoma com código via e-mail</span>
                                 </li>
                             </ul>
                         </div>
 
-                        <div class="mt-2">
-                            <a href="/portal/" class="btn btn-primary-white btn-choice">
+                        <div>
+                            <a href="/portal/dashboard.php" class="btn-action-primary">
                                 <span>Acessar Portal do Cliente</span>
                                 <i class="fa-solid fa-arrow-right"></i>
                             </a>
@@ -110,47 +128,51 @@
                 </div>
 
                 <!-- CARD 2: PORTAL ADMINISTRADORES -->
-                <div class="col-md-6">
-                    <div class="choice-card">
+                <div class="col-md-6 col-lg-5">
+                    <div class="corporate-card card-admin">
                         <div>
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-3 py-2 rounded-pill fw-semibold">
-                                    <i class="fa-solid fa-key me-1"></i> Acesso Restrito TI
+                            <div class="card-badge-header">
+                                <span class="category-tag" style="background: var(--status-info-bg); color: var(--status-info); border: 1px solid var(--status-info-border);">
+                                    <i class="fa-solid fa-sliders me-1"></i> Governança TI
                                 </span>
-                                <span class="badge-status badge-status-running">
-                                    <span class="status-indicator indicator-running"></span> Governança
+                                <span class="status-chip status-chip-info">
+                                    <i class="fa-solid fa-lock"></i> Restrito
                                 </span>
                             </div>
 
-                            <div class="choice-icon bg-warning bg-opacity-10 text-warning">
+                            <div class="icon-holder" style="background: var(--status-info-bg); color: var(--status-info); border: 1px solid var(--status-info-border);">
                                 <i class="fa-solid fa-user-gear"></i>
                             </div>
 
-                            <h3 class="fw-bold mb-2">Portal Administradores</h3>
-                            <p class="text-secondary mb-4">
-                                Console central de governança técnica. Gerenciamento de clientes e acessos, console Bareos Director, Proxmox Backup Server, nuvem Google Cloud Storage e agentes Windows.
+                            <h2 class="card-title">Portal Administradores</h2>
+                            <p class="card-desc">
+                                Console central de governança técnica. Gerenciamento de clientes, orquestrador Bareos Director, Proxmox Backup Server, nuvem GCS e agentes Windows.
                             </p>
 
-                            <ul class="list-unstyled mb-4 small text-secondary">
-                                <li class="mb-2 d-flex align-items-center">
-                                    <i class="fa-solid fa-circle-check text-primary me-2"></i>
-                                    <span>Bareos WebUI & Catálogo PostgreSQL</span>
+                            <ul class="feature-check-list">
+                                <li>
+                                    <i class="fa-solid fa-circle-check text-info"></i>
+                                    <span>Console Bareos WebUI & Catálogo PostgreSQL</span>
                                 </li>
-                                <li class="mb-2 d-flex align-items-center">
-                                    <i class="fa-solid fa-circle-check text-primary me-2"></i>
+                                <li>
+                                    <i class="fa-solid fa-circle-check text-info"></i>
                                     <span>Proxmox Backup Server & Google Cloud Storage</span>
                                 </li>
-                                <li class="d-flex align-items-center">
-                                    <i class="fa-solid fa-circle-check text-primary me-2"></i>
-                                    <span>Gestão de clientes, permissões e instaladores</span>
+                                <li>
+                                    <i class="fa-solid fa-circle-check text-info"></i>
+                                    <span>Instalador oficial e comandos do Agente Windows</span>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-circle-check text-info"></i>
+                                    <span>Gestão de permissões de máquinas e trilha de auditoria</span>
                                 </li>
                             </ul>
                         </div>
 
-                        <div class="mt-2">
-                            <a href="/portal/admin/" class="btn btn-outline-primary btn-choice" style="border-width: 2px;">
+                        <div>
+                            <a href="/portal/admin/index.php" class="btn-action-outline">
                                 <span>Acessar Portal Administradores</span>
-                                <i class="fa-solid fa-lock"></i>
+                                <i class="fa-solid fa-shield"></i>
                             </a>
                         </div>
                     </div>
@@ -158,24 +180,56 @@
 
             </div>
 
+            <!-- SELOS DE CONFORMIDADE E SEGURANÇA (TRUST BAR) -->
+            <div class="trust-badges-bar">
+                <div class="row g-3 justify-content-center text-center">
+                    <div class="col-6 col-md-3">
+                        <div class="trust-badge-item justify-content-center">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>Criptografia TLS 1.3 / AES-256</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="trust-badge-item justify-content-center">
+                            <i class="fa-solid fa-scale-balanced"></i>
+                            <span>Conformidade LGPD Art. 46</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="trust-badge-item justify-content-center">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                            <span>Política 3-2-1 Offsite Imutável</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="trust-badge-item justify-content-center">
+                            <i class="fa-solid fa-server"></i>
+                            <span>Cluster Bareos 25.1 / Debian 13</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 
-    <!-- RODAPÉ CLEAN -->
-    <footer class="footer-clean">
-        <div class="container text-center">
-            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+    <!-- RODAPÉ CORPORATIVO INSTITUCIONAL -->
+    <footer class="footer-corporate">
+        <div class="container">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
                 <div>
-                    <span class="fw-semibold text-secondary">OnliBackup Enterprise</span> © <?= date('Y') ?> • Todos os direitos reservados
+                    <span class="fw-bold" style="color: var(--text-primary);">Onlitec Soluções Tecnológicas Ltda.</span> © <?= date('Y') ?> • Todos os direitos reservados.
                 </div>
-                <div class="text-muted small">
-                    <i class="fa-solid fa-shield-halved text-success me-1"></i> Ambiente Auditado • Criptografia TLS v1.3
+                <div class="d-flex align-items-center gap-3">
+                    <span><i class="fa-solid fa-circle-nodes text-success me-1"></i> Servidor bareos01</span>
+                    <span>•</span>
+                    <span>Auditoria Criptográfica Ativa</span>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Bootstrap & Theme Script -->
+    <!-- Bootstrap Bundle & Theme Script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/portal/assets/js/theme.js"></script>
 </body>

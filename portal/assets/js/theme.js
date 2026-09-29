@@ -1,4 +1,4 @@
-// assets/js/theme.js - OnliBackup Universal Theme Engine (White & Dark)
+// assets/js/theme.js - OnliBackup Enterprise Corporate Theme Engine
 
 (function () {
     'use strict';
@@ -15,9 +15,9 @@
     }
 
     function updateToggleElements(theme) {
-        document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
-            const icon = btn.querySelector('.theme-toggle-icon');
-            const text = btn.querySelector('.theme-toggle-text');
+        document.querySelectorAll('.theme-toggle-btn, .theme-pill-btn').forEach(btn => {
+            const icon = btn.querySelector('.theme-toggle-icon, i');
+            const text = btn.querySelector('.theme-toggle-text, span');
             if (theme === 'dark') {
                 if (icon) {
                     icon.className = 'theme-toggle-icon fa-solid fa-sun text-warning';
@@ -50,12 +50,11 @@
         applyTheme(target);
     };
 
-    // Apply on DOM load
     document.addEventListener('DOMContentLoaded', function () {
         const current = document.documentElement.getAttribute('data-theme') || getStoredTheme();
         applyTheme(current);
 
-        document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+        document.querySelectorAll('.theme-toggle-btn, .theme-pill-btn').forEach(btn => {
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
                 window.toggleTheme();
