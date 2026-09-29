@@ -1,10 +1,14 @@
 <?php
-// portal/login.php - Tela de Login (Tema White)
+// portal/login.php - Tela de Login Unificada (Tema White & Dark)
 
 require_once __DIR__ . '/includes/auth.php';
 
 if (isLoggedIn()) {
-    header("Location: /portal/dashboard.php");
+    if (isAdmin()) {
+        header("Location: /portal/admin/index.php");
+    } else {
+        header("Location: /portal/dashboard.php");
+    }
     exit;
 }
 
@@ -37,7 +41,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 logAudit('login_success', 'Login realizado com sucesso', $user['id'], $email);
 
-                $redirect = $_GET['redirect'] ?? '/portal/dashboard.php';
+                $redirect = $_GET['redirect'] ?? '';
+                if (!empty($redirect)) {
+                    // Prevenir redirecionamento indevido de cliente para páginas admin
+                    if ($user['role'] !== 'admin' && strpos($redirect, '/admin') !== false) {
+                        $redirect = '/portal/dashboard.php';
+                    }
+                } else {
+                    $redirect = ($user['role'] === 'admin') ? '/portal/admin/index.php' : '/portal/dashboard.php';
+                }
+
                 header("Location: " . $redirect);
                 exit;
             }
@@ -48,19 +61,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$pageTitle = "Acesso à Central de Auditoria";
+$pageTitle = "Acesso Seguro ao Portal";
 require_once __DIR__ . '/includes/header.php';
 ?>
 
 <div class="row justify-content-center align-items-center py-5">
     <div class="col-md-6 col-lg-5 col-xl-4">
-        <div class="card-white p-4 p-sm-5 shadow-sm">
+        <div class="card-white p-4 p-sm-5 shadow">
             <div class="text-center mb-4">
-                <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-circle mb-3" style="width: 58px; height: 58px;">
-                    <i class="fa-solid fa-lock fa-xl"></i>
+                <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-circle mb-3" style="width: 64px; height: 64px;">
+                    <i class="fa-solid fa-shield-halved fa-2x"></i>
                 </div>
                 <h4 class="fw-bold text-dark mb-1">Acesso ao Portal</h4>
-                <p class="text-secondary small mb-0">Consulte o status e relatórios de auditoria dos seus backups</p>
+                <p class="text-secondary small mb-0">Consulte laudos de auditoria ou gerencie a infraestrutura</p>
             </div>
 
             <?php if ($error): ?>
@@ -73,8 +86,8 @@ require_once __DIR__ . '/includes/header.php';
                 <div class="mb-3">
                     <label class="form-label small fw-semibold text-secondary">E-mail Cadastrado</label>
                     <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0 text-muted"><i class="fa-solid fa-envelope"></i></span>
-                        <input type="email" name="email" class="form-control form-control-clean border-start-0" placeholder="seu-email@cliente.com" value="<?= htmlspecialchars($emailVal) ?>" required autofocus>
+                        <span class="input-group-text border-end-0 text-muted"><i class="fa-solid fa-envelope"></i></span>
+                        <input type="email" name="email" class="form-control form-control-clean border-start-0" placeholder="seu-email@empresa.com" value="<?= htmlspecialchars($emailVal) ?>" required autofocus>
                     </div>
                 </div>
 
@@ -86,7 +99,7 @@ require_once __DIR__ . '/includes/header.php';
                         </a>
                     </div>
                     <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0 text-muted"><i class="fa-solid fa-key"></i></span>
+                        <span class="input-group-text border-end-0 text-muted"><i class="fa-solid fa-key"></i></span>
                         <input type="password" name="password" class="form-control form-control-clean border-start-0" placeholder="••••••••" required>
                     </div>
                 </div>
@@ -98,7 +111,7 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
             </form>
 
-            <div class="mt-4 pt-3 border-top text-center text-muted small">
+            <div class="mt-4 pt-3 border-top text-center text-muted small" style="border-color: var(--border-color) !important;">
                 Protegido por criptografia TLS v1.3 • OnliBackup
             </div>
         </div>

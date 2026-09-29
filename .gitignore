@@ -14,3 +14,8 @@ cookie.txt
 # SO
 .DS_Store
 Thumbs.db
+
+# Bancos de dados e instaladores binarios
+config/*.db
+downloads/*.exe
+downloads/*.msi
