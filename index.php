@@ -1,22 +1,20 @@
 <?php
-// OnliBackup Enterprise - Gateway Corporativo de Acesso
+// OnliBackup Enterprise - Gateway Corporativo de Acesso (Tema White Padrão)
 ?>
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="dark">
+<html lang="pt-BR" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OnliBackup Enterprise — Central de Acesso</title>
-    <!-- Anti-flicker theme loader -->
+    <title>OnliBackup Enterprise — Central de Backup & Continuidade Operacional</title>
+    <!-- Anti-flicker theme loader: Padrão White Corporativo -->
     <script>
         (function() {
             var theme = localStorage.getItem('onlibackup_theme');
-            if (theme === 'dark' || theme === 'light') {
-                document.documentElement.setAttribute('data-theme', theme);
-            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-                document.documentElement.setAttribute('data-theme', 'light');
-            } else {
+            if (theme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
             }
         })();
     </script>
@@ -28,26 +26,28 @@
     
     <style>
         :root, [data-theme="light"] {
-            --bg-body: #f1f5f9;
+            --bg-body: #f8fafc;
             --bg-card: #ffffff;
-            --bg-card-hover: #f8fafc;
+            --bg-card-hover: #ffffff;
             --border-card: #e2e8f0;
             --border-card-hover: #0284c7;
             --text-heading: #0f172a;
-            --text-body: #475569;
+            --text-body: #334155;
             --text-muted: #64748b;
             --brand-primary: #0284c7;
             --brand-primary-hover: #0369a1;
             --accent-client: #059669;
-            --accent-client-bg: rgba(5, 150, 105, 0.08);
+            --accent-client-bg: #ecfdf5;
+            --accent-client-border: #a7f3d0;
             --accent-admin: #0284c7;
-            --accent-admin-bg: rgba(2, 132, 199, 0.08);
-            --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
-            --shadow-hover: 0 20px 30px -10px rgba(2, 132, 199, 0.15), 0 10px 15px -5px rgba(15, 23, 42, 0.04);
-            --navbar-bg: rgba(255, 255, 255, 0.9);
-            --pill-bg: #f8fafc;
-            --pill-border: #cbd5e1;
-            --ambient-glow: radial-gradient(circle at 50% 0%, rgba(2, 132, 199, 0.08) 0%, transparent 60%);
+            --accent-admin-bg: #eff6ff;
+            --accent-admin-border: #bfdbfe;
+            --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+            --shadow-hover: 0 20px 30px -10px rgba(2, 132, 199, 0.15), 0 8px 16px -6px rgba(15, 23, 42, 0.04);
+            --navbar-bg: rgba(255, 255, 255, 0.95);
+            --pill-bg: #f1f5f9;
+            --pill-border: #e2e8f0;
+            --ambient-glow: radial-gradient(circle at 50% -10%, rgba(2, 132, 199, 0.06) 0%, transparent 60%);
         }
 
         [data-theme="dark"] {
@@ -63,14 +63,16 @@
             --brand-primary-hover: #0ea5e9;
             --accent-client: #10b981;
             --accent-client-bg: rgba(16, 185, 129, 0.12);
+            --accent-client-border: rgba(16, 185, 129, 0.3);
             --accent-admin: #38bdf8;
             --accent-admin-bg: rgba(56, 189, 248, 0.12);
+            --accent-admin-border: rgba(56, 189, 248, 0.3);
             --shadow-card: 0 4px 25px -4px rgba(0, 0, 0, 0.5), 0 2px 10px -2px rgba(0, 0, 0, 0.3);
             --shadow-hover: 0 20px 35px -8px rgba(56, 189, 248, 0.2), 0 10px 15px -5px rgba(0, 0, 0, 0.4);
             --navbar-bg: rgba(15, 23, 42, 0.85);
             --pill-bg: #162032;
             --pill-border: #27364b;
-            --ambient-glow: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08) 0%, transparent 60%);
+            --ambient-glow: radial-gradient(circle at 50% -10%, rgba(56, 189, 248, 0.08) 0%, transparent 60%);
         }
 
         body {
@@ -87,13 +89,14 @@
             letter-spacing: -0.01em;
         }
 
-        /* Navbar */
+        /* Navbar Corporativa */
         .gateway-nav {
             background: var(--navbar-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border-card);
             padding: 14px 0;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.03);
         }
 
         .brand-logo-emblem {
@@ -106,7 +109,7 @@
             justify-content: center;
             color: #ffffff;
             font-size: 1.25rem;
-            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.28);
         }
 
         .brand-logo-text {
@@ -154,7 +157,7 @@
             font-weight: 700;
             background: var(--accent-client-bg);
             color: var(--accent-client);
-            border: 1px solid var(--accent-client);
+            border: 1px solid var(--accent-client-border);
             letter-spacing: 0.04em;
         }
         .pulse-dot {
@@ -171,13 +174,13 @@
             100% { transform: scale(0.9); opacity: 0.8; }
         }
 
-        /* Main Gateway Section */
+        /* Hero */
         .gateway-hero {
-            padding: 48px 0 32px 0;
+            padding: 48px 0 36px 0;
             text-align: center;
         }
         .gateway-title {
-            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            font-size: clamp(2.1rem, 3.8vw, 2.9rem);
             font-weight: 800;
             letter-spacing: -0.035em;
             color: var(--text-heading);
@@ -188,14 +191,15 @@
             color: var(--text-muted);
             max-width: 580px;
             margin: 0 auto;
+            line-height: 1.6;
         }
 
         /* Gateway Cards */
         .gateway-card {
             background-color: var(--bg-card);
             border: 1.5px solid var(--border-card);
-            border-radius: 24px;
-            padding: 36px 32px;
+            border-radius: 22px;
+            padding: 38px 34px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -213,10 +217,10 @@
             color: inherit;
         }
         .card-client:hover {
-            border-color: var(--accent-client);
+            border-color: #10b981;
         }
         .card-admin:hover {
-            border-color: var(--accent-admin);
+            border-color: #0284c7;
         }
 
         .gateway-card-top {
@@ -243,12 +247,12 @@
         .card-client .card-icon-box {
             background: var(--accent-client-bg);
             color: var(--accent-client);
-            border: 1px solid var(--accent-client);
+            border: 1px solid var(--accent-client-border);
         }
         .card-admin .card-icon-box {
             background: var(--accent-admin-bg);
             color: var(--accent-admin);
-            border: 1px solid var(--accent-admin);
+            border: 1px solid var(--accent-admin-border);
         }
 
         .card-tag {
@@ -262,30 +266,30 @@
         .card-client .card-tag {
             background: var(--accent-client-bg);
             color: var(--accent-client);
-            border: 1px solid var(--accent-client);
+            border: 1px solid var(--accent-client-border);
         }
         .card-admin .card-tag {
             background: var(--accent-admin-bg);
             color: var(--accent-admin);
-            border: 1px solid var(--accent-admin);
+            border: 1px solid var(--accent-admin-border);
         }
 
         .gateway-card-name {
-            font-size: 1.6rem;
+            font-size: 1.65rem;
             font-weight: 800;
             color: var(--text-heading);
             letter-spacing: -0.025em;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
         .gateway-card-desc {
-            font-size: 0.94rem;
+            font-size: 0.95rem;
             color: var(--text-body);
             line-height: 1.55;
             margin-bottom: 24px;
             min-height: 48px;
         }
 
-        /* Pill Feature Badges inside Cards */
+        /* Chips */
         .feature-chips {
             display: flex;
             flex-wrap: wrap;
@@ -293,19 +297,19 @@
             margin-bottom: 28px;
         }
         .feature-chip {
-            font-size: 0.76rem;
+            font-size: 0.78rem;
             font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 6px;
+            padding: 5px 12px;
+            border-radius: 8px;
             background: var(--pill-bg);
-            border: 1px solid var(--border-card);
-            color: var(--text-muted);
+            border: 1px solid var(--pill-border);
+            color: var(--text-body);
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
 
-        /* Gateway Buttons */
+        /* Botões */
         .btn-portal-action {
             width: 100%;
             padding: 14px 20px;
@@ -323,36 +327,36 @@
         .btn-client {
             background: linear-gradient(135deg, #059669 0%, #0284c7 100%);
             color: #ffffff !important;
-            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.28);
         }
         .btn-client:hover {
             opacity: 0.95;
             transform: translateY(-2px);
-            box-shadow: 0 8px 22px rgba(5, 150, 105, 0.4);
+            box-shadow: 0 8px 22px rgba(5, 150, 105, 0.38);
         }
 
         .btn-admin {
             background: linear-gradient(135deg, #0284c7 0%, #1d4ed8 100%);
             color: #ffffff !important;
-            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.28);
         }
         .btn-admin:hover {
             opacity: 0.95;
             transform: translateY(-2px);
-            box-shadow: 0 8px 22px rgba(2, 132, 199, 0.4);
+            box-shadow: 0 8px 22px rgba(2, 132, 199, 0.38);
         }
 
-        /* Trust Footer */
+        /* Trust Strip */
         .trust-strip {
             border-top: 1px solid var(--border-card);
-            padding: 24px 0;
+            padding: 28px 0 12px 0;
             margin-top: 48px;
         }
         .trust-item {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             font-weight: 600;
             color: var(--text-muted);
         }
@@ -365,15 +369,15 @@
             margin-top: auto;
             border-top: 1px solid var(--border-card);
             background: var(--bg-card);
-            padding: 20px 0;
-            font-size: 0.82rem;
+            padding: 22px 0;
+            font-size: 0.84rem;
             color: var(--text-muted);
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR CORPORATIVA -->
+    <!-- NAVBAR CORPORATIVA (TEMA WHITE) -->
     <header class="gateway-nav">
         <div class="container d-flex justify-content-between align-items-center" style="max-width: 980px;">
             <a href="/" class="d-flex align-items-center gap-3 text-decoration-none">
@@ -392,7 +396,7 @@
                     <span>ONLINE</span>
                 </div>
 
-                <button type="button" class="theme-pill-btn" title="Alternar tema">
+                <button type="button" class="theme-pill-btn" title="Alternar para modo escuro">
                     <i class="theme-toggle-icon fa-solid fa-moon text-primary"></i>
                     <span class="theme-toggle-text d-none d-sm-inline">Tema Escuro</span>
                 </button>
@@ -400,18 +404,18 @@
         </div>
     </header>
 
-    <!-- CONTEÚDO PRINCIPAL: APENAS AS 2 OPÇÕES COM DESIGN VISUAL DE IMPACTO -->
+    <!-- ÁREA PRINCIPAL: OS 2 CARDS NO TEMA WHITE DE ALTO PADRÃO -->
     <main class="flex-grow-1 d-flex align-items-center py-4">
         <div class="container" style="max-width: 980px;">
             
             <div class="gateway-hero">
                 <h1 class="gateway-title">Central de Acesso</h1>
-                <p class="gateway-subtitle">Selecione o portal corporativo para acessar seus backups ou gerenciar a governança da infraestrutura.</p>
+                <p class="gateway-subtitle">Selecione o portal corporativo para acessar seus backups ou gerenciar a infraestrutura.</p>
             </div>
 
             <div class="row g-4 justify-content-center">
                 
-                <!-- OPÇÃO 1: PORTAL DO CLIENTE -->
+                <!-- CARD 1: PORTAL DO CLIENTE -->
                 <div class="col-md-6">
                     <div class="gateway-card card-client">
                         <div>
@@ -428,7 +432,7 @@
                             </p>
 
                             <div class="feature-chips">
-                                <span class="feature-chip"><i class="fa-solid fa-check text-success"></i> Status ao Vivo</span>
+                                <span class="feature-chip"><i class="fa-solid fa-circle-check text-success"></i> Status ao Vivo</span>
                                 <span class="feature-chip"><i class="fa-solid fa-file-pdf text-success"></i> Laudo LGPD</span>
                                 <span class="feature-chip"><i class="fa-solid fa-key text-success"></i> Recuperação 2FA</span>
                             </div>
@@ -443,7 +447,7 @@
                     </div>
                 </div>
 
-                <!-- OPÇÃO 2: PORTAL ADMINISTRADORES -->
+                <!-- CARD 2: PORTAL ADMINISTRADORES -->
                 <div class="col-md-6">
                     <div class="gateway-card card-admin">
                         <div>

@@ -1,17 +1,14 @@
-// assets/js/theme.js - OnliBackup Enterprise Corporate Theme Engine
+// assets/js/theme.js - OnliBackup Enterprise Theme Engine (Default White Theme)
 
 (function () {
     'use strict';
 
     function getStoredTheme() {
         const stored = localStorage.getItem('onlibackup_theme');
-        if (stored === 'light' || stored === 'dark') {
-            return stored;
-        }
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        if (stored === 'dark') {
             return 'dark';
         }
-        return 'light';
+        return 'light'; // White theme is the standard default
     }
 
     function updateToggleElements(theme) {

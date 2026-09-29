@@ -1,5 +1,5 @@
 <?php
-// includes/header.php - Cabeçalho Corporativo Enterprise (White & Dark)
+// includes/header.php - Cabeçalho Corporativo Enterprise (Padrão Tema White)
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -12,30 +12,31 @@ $portalLabel = $isAdmin ? 'Portal Administradores' : 'Portal do Cliente';
 $pageTitle = $pageTitle ?? ($isAdmin ? 'Portal Administradores' : 'Portal do Cliente');
 ?>
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($pageTitle) ?> — OnliBackup Enterprise</title>
-    <!-- Anti-flicker theme loader -->
+    <!-- Anti-flicker theme loader: Padrão Tema White -->
     <script>
         (function() {
             var theme = localStorage.getItem('onlibackup_theme');
-            if (theme === 'dark' || theme === 'light') {
-                document.documentElement.setAttribute('data-theme', theme);
-            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            if (theme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
             } else {
                 document.documentElement.setAttribute('data-theme', 'light');
             }
         })();
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome 6 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <!-- Corporate Theme CSS -->
-    <link href="/portal/assets/css/theme.css" rel="stylesheet">
+    <link href="/portal/assets/css/theme.css?v=2.3" rel="stylesheet">
 </head>
 <body class="d-flex flex-column min-vh-100">
 
