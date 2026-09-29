@@ -166,15 +166,36 @@ try {
     </div>
 
     <!-- PORTAIS DE GERENCIAMENTO -->
-    <div class="row g-4 justify-content-center mb-4" style="max-width: 1100px; margin: 0 auto;">
+    <div class="row g-4 justify-content-center mb-4" style="max-width: 1200px; margin: 0 auto;">
+        <!-- PORTAL DE AUDITORIA & CLIENTES -->
+        <div class="col-md-6 col-lg-3">
+            <a href="/portal/" class="portal-card p-4 h-100 shadow d-flex flex-column justify-content-between" style="border-top: 3px solid #0284c7;">
+                <div>
+                    <div class="icon-circle bg-primary bg-opacity-25 text-primary">
+                        <i class="fa-solid fa-shield-halved fa-2x"></i>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <h5 class="fw-bold mb-0">Portal Auditoria</h5>
+                        <span class="badge bg-primary bg-opacity-25 text-primary" style="font-size: 0.65rem;">Clientes</span>
+                    </div>
+                    <p class="text-secondary small mb-4">
+                        Acesso exclusivo para clientes corporativos (login/senha), auditoria de integridade, laudo de backup e recuperação de senha por e-mail.
+                    </p>
+                </div>
+                <div class="d-flex align-items-center text-primary fw-semibold small">
+                    Acessar Portal do Cliente <i class="fa-solid fa-arrow-right ms-2"></i>
+                </div>
+            </a>
+        </div>
+
         <!-- BAREOS WEBUI -->
-        <div class="col-md-4">
+        <div class="col-md-6 col-lg-3">
             <a href="/bareos-webui/" class="portal-card card-bareos p-4 h-100 shadow d-flex flex-column justify-content-between">
                 <div>
                     <div class="icon-circle bg-primary bg-opacity-25 text-primary">
                         <i class="fa-solid fa-server fa-2x"></i>
                     </div>
-                    <h4 class="fw-bold mb-2">Bareos WebUI</h4>
+                    <h5 class="fw-bold mb-2">Bareos WebUI</h5>
                     <p class="text-secondary small mb-4">
                         Gerenciamento do Director, catálogo PostgreSQL, jobs do Windows Server (HikCentral), pools de volumes e restaurações.
                     </p>
@@ -186,13 +207,13 @@ try {
         </div>
 
         <!-- PBS MANAGER -->
-        <div class="col-md-4">
+        <div class="col-md-6 col-lg-3">
             <a href="/pbs/" class="portal-card card-pbs p-4 h-100 shadow d-flex flex-column justify-content-between">
                 <div>
                     <div class="icon-circle bg-info bg-opacity-25 text-info">
                         <i class="fa-solid fa-cloud-arrow-up fa-2x"></i>
                     </div>
-                    <h4 class="fw-bold mb-2">PBS Nuvem</h4>
+                    <h5 class="fw-bold mb-2">PBS Nuvem</h5>
                     <p class="text-secondary small mb-4">
                         Configuração de múltiplos servidores Proxmox Backup Server (10 TB Datastore), teste de latência e snapshots remotos.
                     </p>
@@ -204,13 +225,13 @@ try {
         </div>
 
         <!-- GOOGLE DRIVE MANAGER -->
-        <div class="col-md-4">
+        <div class="col-md-6 col-lg-3">
             <a href="/gdrive/" class="portal-card card-gdrive p-4 h-100 shadow d-flex flex-column justify-content-between">
                 <div>
                     <div class="icon-circle bg-success bg-opacity-25 text-success">
                         <i class="fa-brands fa-google-drive fa-2x"></i>
                     </div>
-                    <h4 class="fw-bold mb-2">Google Drive</h4>
+                    <h5 class="fw-bold mb-2">Google Drive</h5>
                     <p class="text-secondary small mb-4">
                         Sincronização offsite via rclone para contas Google Pessoais ou Workspace, monitoramento de quota (5.0 TB) e logs.
                     </p>
